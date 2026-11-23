@@ -32,12 +32,12 @@ function onBatch(state: BarsState, batch: { bars: Bar[] }): (BuyInput | SellInpu
       halted = true;
       return [{ side: 'sell', symbol: SYM, qty: held.qty, max_slippage_bps: SLIP }];
     }
-    if (close * 1000 < peakClose * 982) {
+    if (close * 1000 < peakClose * 965) {
       cooldown = 60;
       peakClose = 0;
       return [{ side: 'sell', symbol: SYM, qty: held.qty, max_slippage_bps: SLIP }];
     }
-    if (emaSlow !== null && close * 1000 < emaSlow * 996) {
+    if (emaSlow !== null && close * 1000 < emaSlow * 988) {
       cooldown = 60;
       peakClose = 0;
       return [{ side: 'sell', symbol: SYM, qty: held.qty, max_slippage_bps: SLIP }];
@@ -53,12 +53,12 @@ function onBatch(state: BarsState, batch: { bars: Bar[] }): (BuyInput | SellInpu
 
   const n = closes.length;
   if (
-    n >= 200 &&
+    n >= 150 &&
     emaSlow !== null &&
     close > emaSlow &&
     slowHist.length === 31 &&
     slowHist[30] > slowHist[0] &&
-    closes[n - 1] * 1000 > closes[n - 121] * 1002
+    closes[n - 1] * 1000 > closes[n - 121] * 1001
   ) {
     peakClose = close;
     return [{ side: 'buy', symbol: SYM, notional_quote_units: (state.cash * 95n) / 100n, max_slippage_bps: SLIP }];
